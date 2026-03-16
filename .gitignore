@@ -1,0 +1,9 @@
+node_modules/
+dist/
+target/
+.DS_Store
+*.xlsx
+*.csv
+# Keeping the generated files for this specific exercise though
+!Excercise_01_APIBrooker_APITestCase_RICEPOT_Methode/*.xlsx
+!Excercise_01_APIBrooker_APITestCase_RICEPOT_Methode/*.csv

@@ -1,0 +1,54 @@
+﻿Role,Input,Criticality,Expected Result,Preconditions,Output / Observables,Test Do’s / Don’ts
+QA Tester,"POST `/auth`
+Headers: `Content-Type: application/json`
+Body: `{""username"": ""admin"", ""password"": ""password123""}`",**Critical**,"HTTP 200 OK
+JSON Response: `{""token"": ""<token_string>""}`",API server is reachable.,Token generated and visible in response body.,"**Do:** Validate that the token is a non-empty string.
+**Don't:** Hardcode the token for future tests."
+QA Tester,"POST `/auth`
+Headers: `Content-Type: application/json`
+Body: `{""username"": ""invalid"", ""password"": ""password123""}`",High,"HTTP 200 OK
+JSON Response: `{""reason"": ""Bad credentials""}`",API server is reachable.,"""Bad credentials"" message in response.","**Do:** Verify that status code is 200 even on failure (as per API design).
+**Don't:** Expect 401 Unauthorized unless API spec changes."
+QA Tester,"POST `/auth`
+Headers: `Content-Type: application/json`
+Body: `{""username"": ""admin""}` (Missing password)",Medium,"HTTP 200 OK
+JSON Response: `{""reason"": ""Bad credentials""}`",API server is reachable.,Error message in response body.,"**Do:** Check for missing mandatory fields.
+**Don't:** Skip field validation."
+QA Tester,GET `/booking`,High,"HTTP 200 OK
+Array of objects containing `bookingid`.",At least one booking exists.,List of booking IDs returned.,"**Do:** Validate array structure.
+**Don't:** Assume fixed number of bookings."
+QA Tester,GET `/booking?firstname=Sally&lastname=Brown`,Medium,"HTTP 200 OK
+Filtered list of booking IDs.","Booking for ""Sally Brown"" exists.",Only IDs matching criteria are returned.,"**Do:** Verify query params are correctly applied.
+**Don't:** Mix different search terms in one case."
+QA Tester,"GET `/booking/1`
+Header: `Accept: application/json`",High,"HTTP 200 OK
+JSON with firstname, lastname, prices, dates, etc.",Booking with ID 1 exists.,Detailed booking JSON returned.,"**Do:** Validate all fields present in response.
+**Don't:** Ignore header `Accept`."
+QA Tester,"GET `/booking/999123`
+Header: `Accept: application/json`",Medium,HTTP 404 Not Found,Booking with ID 999123 does not exist.,404 status code returned.,"**Do:** Test for non-existent resource.
+**Don't:** Expect a generic 500 error."
+QA Tester,"POST `/booking`
+Headers: `Content-Type: application/json`, `Accept: application/json`
+Body: `{""firstname"": ""Jim"", ""lastname"": ""Brown"", ""totalprice"": 111, ""depositpaid"": true, ""bookingdates"": {""checkin"": ""2018-01-01"", ""checkout"": ""2019-01-01""}, ""additionalneeds"": ""Breakfast""}`",**Critical**,"HTTP 200 OK
+JSON response with `bookingid` and the created `booking`.",API server is running.,New booking ID created; DB side effect: booking persists.,"**Do:** Validate response matches input fields.
+**Don't:** Use invalid date formats."
+QA Tester,"POST `/booking`
+Body: `{ ""firstname"": ""Jim"" }` (Missing fields)",Medium,HTTP 500 Internal Server Error (or site-specific error),API server is running.,Error response or status code.,"**Do:** Test boundary/missing fields.
+**Don't:** Assume API handles partial data gracefully if PUT/POST requires full schema."
+QA Tester,"PUT `/booking/1`
+Headers: `Content-Type: application/json`, `Accept: application/json`, `Cookie: token=<valid_token>` (or Auth header)
+Body: Fully populated JSON with updated values.",**Critical**,"HTTP 200 OK
+JSON response with updated booking details.","1. Booking with ID 1 exists.
+2. Valid Auth token generated.",Booking details updated in DB; Response reflects new data.,"**Do:** Ensure ALL fields are sent (PUT rule).
+**Don't:** Forget the Authentication header/cookie."
+QA Tester,"PUT `/booking/1`
+Headers: `Content-Type: application/json`
+Body: {...} (No Token)",High,HTTP 403 Forbidden,Booking with ID 1 exists.,403 status code returned.,"**Do:** Validate security constraints.
+**Don't:** Skip authentication testing."
+QA Tester,"DELETE `/booking/1`
+Headers: `Cookie: token=<valid_token>`",**Critical**,HTTP 201 Created (Success per documentation),"1. Booking with ID 1 exists.
+2. Valid Auth token generated.",Booking removed from DB; Subsequent GET returns 404.,"**Do:** Verify resource is gone after deletion.
+**Don't:** Re-use the same ID without re-creating."
+QA Tester,"DELETE `/booking/999123`
+Headers: `Cookie: token=<valid_token>`",Medium,HTTP 405 Method Not Allowed (or 404 depending on impl),Valid Auth token generated.,Error status code returned.,"**Do:** Test deletion of non-existent resource.
+**Don't:** Expect success on invalid IDs."

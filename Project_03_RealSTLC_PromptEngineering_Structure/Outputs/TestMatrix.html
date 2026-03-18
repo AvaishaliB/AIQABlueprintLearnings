@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VWO QA Execution Matrix</title>
+    <style>
+        body { font-family: 'Lato', sans-serif; background-color: #f8fafc; padding: 40px; }
+        .matrix-container { display: flex; gap: 50px; align-items: flex-start; }
+        table { border-collapse: collapse; background: white; }
+        th, td { border: 1px solid #1e293b; padding: 8px 12px; font-size: 14px; }
+        
+        .header-blue { background-color: #4285F4; color: white; text-align: center; font-size: 18px; font-weight: bold; }
+        .header-purple { background-color: #9333EA; color: white; text-align: center; font-size: 18px; font-weight: bold; }
+        
+        .val-col { width: 100px; text-align: center; font-weight: bold; }
+        .label-col { width: 350px; }
+        
+        .bg-green { background-color: #34D399; }
+        .bg-red { background-color: #EF4444; }
+        .bg-orange { background-color: #F59E0B; }
+        .bg-gray { background-color: #D1D5DB; }
+    </style>
+</head>
+<body>
+
+<div class="matrix-container">
+    <!-- Main Table -->
+    <table>
+        <tr><th colspan="2" class="header-blue">Test Metrics</th></tr>
+        <tr><td class="label-col">No. Of Requirements</td><td class="val-col">4</td></tr>
+        <tr><td class="label-col">Avg. No. of Test Cases written Per Requirem</td><td class="val-col">3.75</td></tr>
+        <tr><td class="label-col">Total No.of Test Cases written for all Require</td><td class="val-col">15</td></tr>
+        <tr><td class="label-col">Total No. Of test cases Executed</td><td class="val-col">15</td></tr>
+        <tr><td class="label-col">No.of Test Cases Passed</td><td class="val-col bg-green">10</td></tr>
+        <tr><td class="label-col">No.of Test Cases Failed</td><td class="val-col bg-red">5</td></tr>
+        <tr><td class="label-col">No.of Test cases Blocked</td><td class="val-col">0</td></tr>
+        <tr><td class="label-col">No. Of Test Cases Un Executed</td><td class="val-col">0</td></tr>
+        <tr><td class="label-col">Total No. Of Defects Identified</td><td class="val-col bg-orange">5</td></tr>
+        <tr><td class="label-col">Critical Defects Count</td><td class="val-col">1</td></tr>
+        <tr><td class="label-col">Higher Defects Count</td><td class="val-col">4</td></tr>
+        <tr><td class="label-col">Medium Defects Count</td><td class="val-col">0</td></tr>
+        <tr><td class="label-col">Low Defects Count</td><td class="val-col">0</td></tr>
+        <tr><td class="label-col">Customer Defects</td><td class="val-col">0</td></tr>
+        <tr><td class="label-col">No.of defects found in UAT</td><td class="val-col">0</td></tr>
+    </table>
+
+    <!-- Side Table -->
+    <table style="margin-top: 100px;">
+        <tr><th colspan="2" class="header-purple">Test Metrics</th></tr>
+        <tr><td style="width: 200px;">% of Test cases Executed:</td><td class="val-col bg-gray">100</td></tr>
+        <tr><td>% of test cases NOT exec</td><td class="val-col">0</td></tr>
+        <tr><td>% Test cases passed</td><td class="val-col">66.7</td></tr>
+        <tr><td>% Test cases failed</td><td class="val-col">33.3</td></tr>
+        <tr><td>%Test cases blocked</td><td class="val-col">0</td></tr>
+    </table>
+</div>
+
+</body>
+</html>

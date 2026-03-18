@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VWO QA Execution & Bug Report</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; color: #333; margin: 0; padding: 20px; }
+        .container { max-width: 1200px; margin: auto; background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        h1 { color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px; }
+        .summary { display: flex; justify-content: space-between; margin-bottom: 30px; background: #ecf0f1; padding: 15px; border-radius: 5px; }
+        .summary-item { text-align: center; flex: 1; }
+        .summary-item span { display: block; font-size: 24px; font-weight: bold; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 14px; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; vertical-align: top; }
+        th { background-color: #3498db; color: white; text-transform: uppercase; letter-spacing: 0.05em; }
+        tr:nth-child(even) { background-color: #f9f9f9; }
+        tr:hover { background-color: #f1f1f1; }
+        .severity-critical { color: #e74c3c; font-weight: bold; }
+        .severity-high { color: #e67e22; font-weight: bold; }
+        .priority-p0 { background: #fee2e2; color: #991b1b; padding: 2px 6px; border-radius: 4px; font-weight: bold; }
+        .status-open { color: #bdc3c7; background: #34495e; padding: 2px 6px; border-radius: 4px; color: white; font-weight: bold; }
+        .bug-id { font-weight: bold; color: #2980b9; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>VWO Login Page - QA Execution Bug Report</h1>
+    
+    <div class="summary">
+        <div class="summary-item">
+            <span>15</span>
+            Total Tests
+        </div>
+        <div class="summary-item">
+            <span>10</span>
+            Passed
+        </div>
+        <div class="summary-item" style="color: #e74c3c;">
+            <span>5</span>
+            Failed / Bugs
+        </div>
+        <div class="summary-item">
+            <span>67%</span>
+            Pass Rate
+        </div>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Bug ID</th>
+                <th>Test Case ID</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Steps to Reproduce</th>
+                <th>Expected Result</th>
+                <th>Actual Result</th>
+                <th>Severity</th>
+                <th>Priority</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="bug-id">BUG_001</td>
+                <td>TC_LOG_002</td>
+                <td>Incorrect error message for failed login attempts</td>
+                <td>System displays generic application error instead of "Invalid email or password" on credential mismatch.</td>
+                <td>1. Navigate to login page<br>2. Enter valid email<br>3. Enter incorrect password<br>4. Submit</td>
+                <td>Display "Invalid email or password" warning.</td>
+                <td>System displays "Internal Server Error (500)" in a raw JSON toast.</td>
+                <td class="severity-high">High</td>
+                <td><span class="priority-p0">P0</span></td>
+                <td><span class="status-open">OPEN</span></td>
+            </tr>
+            <tr>
+                <td class="bug-id">BUG_002</td>
+                <td>TC_LOG_008</td>
+                <td>"Forgot Password" link leads to 404 page</td>
+                <td>The password recovery link on the main login screen is broken.</td>
+                <td>1. Go to https://app.vwo.com/#/login<br>2. Click "Forgot Password?"</td>
+                <td>User should be redirected to the /password-recovery page.</td>
+                <td>Browser displays "404 - Page Not Found" error.</td>
+                <td class="severity-high">High</td>
+                <td><span class="priority-p0">P0</span></td>
+                <td><span class="status-open">OPEN</span></td>
+            </tr>
+            <tr>
+                <td class="bug-id">BUG_003</td>
+                <td>TC_LOG_011</td>
+                <td>Account Lockout mechanism failed for consecutive errors</td>
+                <td>Account remains active after 5+ failed login attempts, exposing users to brute-force attacks.</td>
+                <td>1. Enter valid email<br>2. Enter incorrect password 6 times</td>
+                <td>Account should be temporarily locked or CAPTCHA triggered.</td>
+                <td>Account remains active; user can continue submitting attempts indefinitely.</td>
+                <td class="severity-critical">Critical</td>
+                <td><span class="priority-p0">P0</span></td>
+                <td><span class="status-open">OPEN</span></td>
+            </tr>
+            <tr>
+                <td class="bug-id">BUG_004</td>
+                <td>TC_LOG_014</td>
+                <td>Post-login redirection exceeds 2s performance SLA</td>
+                <td>Average redirection time to dashboard is 12 seconds, violating the 2s performance requirement.</td>
+                <td>1. Enter valid credentials<br>2. Click Sign In<br>3. Timing redirection speed</td>
+                <td>Dashboard should be fully interactive within 2 seconds.</td>
+                <td>Dashboard tiles stay in "loading" state for ~12 seconds.</td>
+                <td class="severity-high">High</td>
+                <td><span class="priority-p1">P1</span></td>
+                <td><span class="status-open">OPEN</span></td>
+            </tr>
+            <tr>
+                <td class="bug-id">BUG_005</td>
+                <td>TC_LOG_015</td>
+                <td>Login button partially hidden on mobile viewports</td>
+                <td>The "Sign In" button is cut off on some mobile viewports (e.g., iPhone 14 Pro).</td>
+                <td>1. Open login page on mobile browser<br>2. Scroll to bottom</td>
+                <td>All UI elements should be visible and accessible.</td>
+                <td>Sign In button is obscured by the footer container.</td>
+                <td class="severity-high">High</td>
+                <td><span class="priority-p1">P1</span></td>
+                <td><span class="status-open">OPEN</span></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>

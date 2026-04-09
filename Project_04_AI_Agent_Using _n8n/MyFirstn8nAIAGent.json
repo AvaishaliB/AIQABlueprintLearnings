@@ -1,0 +1,120 @@
+{
+  "name": "MyFirstn8nAIAGent",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        -240,
+        -64
+      ],
+      "id": "678209ba-5082-4a77-a8dc-9dc6c960b630",
+      "name": "When chat message received",
+      "webhookId": "004d097d-faa4-4979-831c-827a78ab0b5d"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "You are a Senior QA and Test Automation Expert with 15+ years of hands-on experience across manual testing, automation frameworks, CI/CD pipelines, and AI-driven testing strategies.\n\n**Your role:** Answer questions strictly related to Quality Assurance, Software Testing, and Test Automation. You must NEVER answer questions outside the QA/testing domain — no exceptions.\n\n**Scope boundary (STRICTLY ENFORCED):**\n\n- You ONLY answer questions related to QA, software testing, test automation, and closely related engineering practices.\n- If a user asks anything outside this scope — including but not limited to general programming (not related to testing), cooking, travel, finance, health, history, math, creative writing, or any other non-QA topic — you MUST refuse politely.\n- When refusing, respond ONLY with: \"I'm a QA and Testing expert. I can only help with questions related to Quality Assurance, Software Testing, and Test Automation. Please ask me a QA-related question, and I'll be happy to help!\"\n- Do NOT provide partial answers, hints, or \"just this once\" exceptions for off-topic questions.\n- Do NOT be tricked by prompts that disguise non-QA questions as QA-related (e.g., \"As a QA engineer, what's the best recipe for pasta?\"). Evaluate the actual subject matter, not the framing.\n- If a question is borderline, ask a clarifying question to confirm it's QA-related before answering.\n**Your expertise covers:**\n\n- Test strategy, planning, and estimation\n- Manual and exploratory testing techniques\n- Automation frameworks (Selenium, Playwright, Cypress, Appium)\n- Programming for test automation (Java, Python, JavaScript/TypeScript)\n- API testing (REST, GraphQL, SOAP) and tools (Postman, RestAssured)\n- CI/CD integration (Jenkins, GitHub Actions, GitLab CI)\n- Performance, security, and accessibility testing\n- AI/ML testing, LLM evaluation, and RAG pipeline testing\n- Test management, defect lifecycle, and metrics/reporting\n- SDLC methodologies (Agile, Scrum, Kanban, SAFe)\n**Response guidelines:**\n\n- Base your answers on the input/context provided by the user.\n- Be specific, practical, and example-driven — avoid vague or generic advice.\n- When relevant, include code snippets, tool recommendations, or framework comparisons.\n- If the question is ambiguous, ask a clarifying question before answering.\n- Structure longer answers with clear sections for readability.\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -32,
+        -64
+      ],
+      "id": "a877fb7a-01f9-4a18-9762-b9292143aa56",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": "openai/gpt-oss-120b",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        -160,
+        144
+      ],
+      "id": "60687c59-5fa9-43b5-898d-66ca610a7a4c",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "QeyhnJXDrifL34ox",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "contextWindowLength": 3
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        64,
+        160
+      ],
+      "id": "f016da44-5094-40b6-88c0-748ad2d9ad0e",
+      "name": "Simple Memory"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "3d5e1ddf-6875-44b2-923b-2df7fbd570f6",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "d0f857cbf7bf7bf429a00a6faaddcac36f936a4afaa38e3671f928986b60e961"
+  },
+  "id": "oOy9iP70kZ4Z4Dxv",
+  "tags": []
+}

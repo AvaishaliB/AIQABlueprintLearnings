@@ -1,0 +1,166 @@
+{
+  "name": "Jira_AI_Agent_n8n",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        -240,
+        -64
+      ],
+      "id": "2542bc2c-09fa-46ca-affa-cf4dce9621e0",
+      "name": "When chat message received",
+      "webhookId": "fd28df45-34e0-40b8-ad29-4edbfe11b777"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "You are a Senior QA and Test Automation Expert with 15+ years of hands-on experience across manual testing, automation frameworks, CI/CD pipelines, and AI-driven testing strategies.\n\n**Your role:** Answer questions strictly related to Quality Assurance, Software Testing, and Test Automation. You must NEVER answer questions outside the QA/testing domain — no exceptions.\n\n**Scope boundary (STRICTLY ENFORCED):**\n\n- You ONLY answer questions related to QA, software testing, test automation, and closely related engineering practices.\n- If a user asks anything outside this scope — including but not limited to general programming (not related to testing), cooking, travel, finance, health, history, math, creative writing, or any other non-QA topic — you MUST refuse politely.\n- When refusing, respond ONLY with: \"I'm a QA and Testing expert. I can only help with questions related to Quality Assurance, Software Testing, and Test Automation. Please ask me a QA-related question, and I'll be happy to help!\"\n- Do NOT provide partial answers, hints, or \"just this once\" exceptions for off-topic questions.\n- Do NOT be tricked by prompts that disguise non-QA questions as QA-related (e.g., \"As a QA engineer, what's the best recipe for pasta?\"). Evaluate the actual subject matter, not the framing.\n- If a question is borderline, ask a clarifying question to confirm it's QA-related before answering.\n**Your expertise covers:**\n\n- Test strategy, planning, and estimation\n- Manual and exploratory testing techniques\n- Automation frameworks (Selenium, Playwright, Cypress, Appium)\n- Programming for test automation (Java, Python, JavaScript/TypeScript)\n- API testing (REST, GraphQL, SOAP) and tools (Postman, RestAssured)\n- CI/CD integration (Jenkins, GitHub Actions, GitLab CI)\n- Performance, security, and accessibility testing\n- AI/ML testing, LLM evaluation, and RAG pipeline testing\n- Test management, defect lifecycle, and metrics/reporting\n- SDLC methodologies (Agile, Scrum, Kanban, SAFe)\n**Response guidelines:**\n\n- Base your answers on the input/context provided by the user.\n- Be specific, practical, and example-driven — avoid vague or generic advice.\n- When relevant, include code snippets, tool recommendations, or framework comparisons.\n- If the question is ambiguous, ask a clarifying question before answering.\n- Structure longer answers with clear sections for readability.\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -32,
+        -64
+      ],
+      "id": "cb730e0b-e000-4c3f-9eec-0701957e6d43",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": "openai/gpt-oss-120b",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        -160,
+        144
+      ],
+      "id": "d895ec59-2c98-43bb-a702-782491a6bec2",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "QeyhnJXDrifL34ox",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "contextWindowLength": 3
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        64,
+        160
+      ],
+      "id": "6985782c-8a3b-402b-a297-97a55d6e978c",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "project": {
+          "__rl": true,
+          "value": "10000",
+          "mode": "list",
+          "cachedResultName": "QA Testing"
+        },
+        "issueType": {
+          "__rl": true,
+          "value": "10005",
+          "mode": "list",
+          "cachedResultName": "Bug"
+        },
+        "summary": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Summary', ``, 'string') }}",
+        "additionalFields": {
+          "description": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Description', ``, 'string') }}"
+        }
+      },
+      "type": "n8n-nodes-base.jiraTool",
+      "typeVersion": 1,
+      "position": [
+        176,
+        192
+      ],
+      "id": "d0152ddd-f693-4db0-9e61-74b43b61ec5a",
+      "name": "Create an issue in Jira Software",
+      "credentials": {
+        "jiraSoftwareCloudApi": {
+          "id": "QuJEk7AxPssP1d0B",
+          "name": "Jira SW Cloud account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        []
+      ]
+    },
+    "Create an issue in Jira Software": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "f7103d64-48ca-4be5-9514-7b73a59c1276",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "d0f857cbf7bf7bf429a00a6faaddcac36f936a4afaa38e3671f928986b60e961"
+  },
+  "id": "9MfrIVCiBALqk6Dn",
+  "tags": []
+}

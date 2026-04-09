@@ -4,6 +4,11 @@ target/
 .DS_Store
 *.xlsx
 *.csv
-# Keeping the generated files for this specific exercise though
+# Keeping specific exercise files
 !Excercise_01_APIBrooker_APITestCase_RICEPOT_Methode/*.xlsx
 !Excercise_01_APIBrooker_APITestCase_RICEPOT_Methode/*.csv
+
+# Sanity check artifacts (optional to keep, but usually ignored)
+# saucedemo_login_screenshot.png
+# automated_sanity_check.py
+# sanity_check_script.py

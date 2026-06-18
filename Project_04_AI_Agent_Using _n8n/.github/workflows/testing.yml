@@ -1,0 +1,146 @@
+# ============================================================
+# 🚀 GitHub Actions - Learning Workflow
+# File: .github/workflows/testing.yml
+# Project: AI Agent Using n8n
+# Author: Avaishal
+# Description: A beginner-friendly workflow to understand
+#              how GitHub Actions works step by step.
+# ============================================================
+
+# ------------------------------
+# 1️⃣ NAME OF THE WORKFLOW
+# This is what shows up in the GitHub Actions tab
+# ------------------------------
+name: 🧪 My First GitHub Actions - Testing Workflow
+
+# ------------------------------
+# 2️⃣ TRIGGERS (When should this workflow run?)
+# ------------------------------
+on:
+  # ✅ Trigger: Runs every time code is pushed to the main branch
+  push:
+    branches:
+      - main
+
+  # ✅ Trigger: Runs when a Pull Request is opened/updated on main
+  pull_request:
+    branches:
+      - main
+
+  # ✅ Trigger: Allows you to manually run this workflow
+  #             from the GitHub Actions tab (very useful for learning!)
+  workflow_dispatch:
+
+# ------------------------------
+# 3️⃣ JOBS (What tasks should run?)
+# ------------------------------
+jobs:
+
+  # ---- JOB 1: Say Hello ----
+  say-hello:
+    name: 👋 Step 1 - Say Hello Job
+    runs-on: ubuntu-latest   # The virtual machine GitHub uses to run this
+
+    steps:
+      # Step 1: Print a welcome message
+      - name: 🙏 Welcome Message
+        run: echo "Hello! Welcome to GitHub Actions! This is your first workflow running! 🎉"
+
+      # Step 2: Print date and time
+      - name: 📅 Print Current Date & Time
+        run: date
+
+      # Step 3: Print which OS and environment we are using
+      - name: 🖥️ Show Runner Environment
+        run: |
+          echo "Operating System: $(uname -a)"
+          echo "Current User: $(whoami)"
+          echo "Current Directory: $(pwd)"
+
+  # ---- JOB 2: Checkout and Explore Repo ----
+  explore-repo:
+    name: 📂 Step 2 - Explore Repository
+    runs-on: ubuntu-latest
+    needs: say-hello    # This job runs AFTER say-hello completes
+
+    steps:
+      # Step 1: Checkout the repository code
+      - name: ⬇️ Checkout Repository Code
+        uses: actions/checkout@v4
+        # This action downloads your repo code into the runner
+
+      # Step 2: List all files in the repo
+      - name: 📋 List Repository Files
+        run: |
+          echo "========================================"
+          echo "📁 Files in this repository:"
+          echo "========================================"
+          ls -la
+          echo ""
+          echo "📂 All files (recursive):"
+          find . -not -path './.git/*' -type f
+
+      # Step 3: Display repo info
+      - name: ℹ️ Repository Information
+        run: |
+          echo "========================================"
+          echo "📌 Repository Info"
+          echo "========================================"
+          echo "Repo Name   : ${{ github.repository }}"
+          echo "Branch Name : ${{ github.ref_name }}"
+          echo "Commit SHA  : ${{ github.sha }}"
+          echo "Triggered by: ${{ github.actor }}"
+          echo "Event Type  : ${{ github.event_name }}"
+
+  # ---- JOB 3: Simulated QA Test Check ----
+  qa-check:
+    name: ✅ Step 3 - Simulated QA Test Check
+    runs-on: ubuntu-latest
+    needs: explore-repo    # This job runs AFTER explore-repo completes
+
+    steps:
+      # Step 1: Checkout repo
+      - name: ⬇️ Checkout Code
+        uses: actions/checkout@v4
+
+      # Step 2: Simulate a simple test check
+      - name: 🔍 Simulated Test - Check if workflow file exists
+        run: |
+          echo "Running QA Check..."
+          FILE=".github/workflows/testing.yml"
+          if [ -f "$FILE" ]; then
+            echo "✅ PASS: Workflow file '$FILE' exists!"
+          else
+            echo "❌ FAIL: Workflow file not found!"
+            exit 1
+          fi
+
+      # Step 3: Simulate test cases passing
+      - name: 🧪 Simulated Test Cases
+        run: |
+          echo "========================================"
+          echo "🧪 Running Simulated Test Suite"
+          echo "========================================"
+          echo "Test Case 1: Verify workflow trigger  ... ✅ PASSED"
+          echo "Test Case 2: Verify job execution     ... ✅ PASSED"
+          echo "Test Case 3: Verify repo checkout     ... ✅ PASSED"
+          echo "Test Case 4: Verify environment info  ... ✅ PASSED"
+          echo "Test Case 5: Verify QA check step     ... ✅ PASSED"
+          echo "========================================"
+          echo "🎉 All 5 test cases PASSED successfully!"
+          echo "========================================"
+
+      # Step 4: Final summary
+      - name: 🏁 Workflow Complete
+        run: |
+          echo ""
+          echo "=============================================="
+          echo "🎓 LEARNING SUMMARY - What happened here?"
+          echo "=============================================="
+          echo "1. Workflow was TRIGGERED by: ${{ github.event_name }}"
+          echo "2. JOB 1 (say-hello)    → Printed messages & date"
+          echo "3. JOB 2 (explore-repo) → Checked out and listed repo files"
+          echo "4. JOB 3 (qa-check)     → Ran simulated QA test cases"
+          echo "=============================================="
+          echo "✅ All jobs completed successfully!"
+          echo "=============================================="
